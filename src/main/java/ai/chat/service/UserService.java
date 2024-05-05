@@ -17,12 +17,15 @@ public class UserService {
   public UserRepository userRepository;
 
   public User createUser(UserDto userDto){
+    User existingUser = userRepository.findByUserId(userDto.getUsername());
+    if(existingUser != null){
+      throw new IllegalArgumentException("User already exists");
+    }
     User user = User.builder()
         .username(userDto.getUsername())
         .password(userDto.getPassword())
         .accountType(AccountType.FREE)
         .build();
-
     userRepository.save(user);
     return user;
   }
