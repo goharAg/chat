@@ -12,14 +12,31 @@ import ai.chat.dto.*;
 public class UserRequestService {
     public UserRepository userRepository;
 
-    public UserResponseDto receiveMessage(String id) {
-        AccountType accountType = checkAccountType(id);
-        UserResponseDto userResponse = new UserResponseDto(id, accountType);
-        //if type is free pass to one model, if premium to another
+    public UserResponseDto getUserInfo(String id) {
+        User user = userRepository.findByUserId(id);
+        AccountType accountType = user.getAccountType();
+        String username = user.getUsername();
+        UserResponseDto userResponse = new UserResponseDto(id, username, accountType);
         return userResponse;
     }
-    public AccountType checkAccountType(String id) {
+
+    public boolean isFree(String id) {
         User user = userRepository.findByUserId(id);
-        return user.getAccountType();
+        AccountType accountType = user.getAccountType();
+        if (accountType == AccountType.FREE) {
+            return true;
+        }
+        return false;
     }
+
+    public boolean isPremium(String id) {
+        User user = userRepository.findByUserId(id);
+        AccountType accountType = user.getAccountType();
+        if (accountType == AccountType.PREMIUM) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

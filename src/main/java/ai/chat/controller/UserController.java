@@ -13,7 +13,7 @@ public class UserController {
 
     @PostMapping("/{id}")
     public UserResponseDto passRequest(@PathVariable String id) {
-        UserResponseDto userResponseDto = userRequestService.receiveMessage(id);
+        UserResponseDto userResponseDto = userRequestService.getUserInfo(id);
         return userResponseDto;
     }
 }

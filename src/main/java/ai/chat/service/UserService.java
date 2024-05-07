@@ -6,7 +6,7 @@ import ai.chat.model.AccountType;
 import ai.chat.model.User;
 import ai.chat.repository.UserRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ public class UserService {
 
   public UserRepository userRepository;
 
-  public User createUser(UserDto userDto){
-    User existingUser = userRepository.findByUserId(userDto.getUsername());
+  public String createUser(UserDto userDto){
+    User existingUser = userRepository.findByUsername(userDto.getUsername());
     if(existingUser != null){
       throw new IllegalArgumentException("User already exists");
     }
@@ -27,7 +27,7 @@ public class UserService {
         .accountType(AccountType.FREE)
         .build();
     userRepository.save(user);
-    return user;
+    return user.getId();
   }
 
   public List<UserNameDto> getAll(){
