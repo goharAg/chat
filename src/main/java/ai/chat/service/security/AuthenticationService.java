@@ -1,10 +1,11 @@
 package ai.chat.service.security;
 
 import ai.chat.dto.JwtAuthenticationResponse;
+import ai.chat.dto.RegistrationDto;
 import ai.chat.dto.UserDto;
 
 public interface AuthenticationService {
-  JwtAuthenticationResponse signup(UserDto request);
+  JwtAuthenticationResponse signup(RegistrationDto request);
 
-  JwtAuthenticationResponse signin(UserDto request);
+  JwtAuthenticationResponse signin(RegistrationDto request);
 }

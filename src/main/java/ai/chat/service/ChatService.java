@@ -1,6 +1,6 @@
 package ai.chat.service;
 import ai.chat.client.*;
-import ai.chat.dto.ResponseDTO;
+import ai.chat.dto.MessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,12 +18,12 @@ public class ChatService {
         this.premiumLLMClient = premiumLLMClient;
     }
 
-    public ResponseDTO callFreeModel(ResponseDTO request) throws JsonProcessingException {
-        return freeLLMClient.generateResponse(request.getResponse(), request.getContext());
+    public MessageDTO callFreeModel(MessageDTO request) throws JsonProcessingException {
+        return freeLLMClient.generateResponse(request.getMessage(), request.getContext());
     }
 
-    public ResponseDTO callPremiumModel(ResponseDTO request) throws JsonProcessingException {
-        return premiumLLMClient.generateResponse(request.getResponse(), request.getContext());
+    public MessageDTO callPremiumModel(MessageDTO request) throws JsonProcessingException {
+        return premiumLLMClient.generateResponse(request.getMessage(), request.getContext());
     }
 
 }

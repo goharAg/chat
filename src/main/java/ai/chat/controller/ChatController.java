@@ -1,8 +1,8 @@
 package ai.chat.controller;
 
 import ai.chat.dto.UserNameDto;
-import ai.chat.service.UserService;
 
+import ai.chat.service.UserService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

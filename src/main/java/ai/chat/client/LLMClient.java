@@ -1,6 +1,6 @@
 package ai.chat.client;
 
-import ai.chat.dto.ResponseDTO;
+import ai.chat.dto.MessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class LLMClient {
     private final String model;
 
 
-    public ResponseDTO generateResponse(String prompt, ArrayList<Integer> context)
+    public MessageDTO generateResponse(String prompt, ArrayList<Integer> context)
             throws JsonProcessingException {
         String url = baseUrl + "/api/generate";
         ObjectMapper mapper = new ObjectMapper();
@@ -41,7 +41,7 @@ public class LLMClient {
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(payloadMap), headers);
         try {
             String jsonResponse = restTemplate.postForObject(url, entity, String.class);
-            return mapper.readValue(jsonResponse, ResponseDTO.class);
+            return mapper.readValue(jsonResponse, MessageDTO.class);
         } catch (JsonProcessingException e) {
             logger.error("Error generating JSON payload: {}", e.getMessage(), e);
             throw new RuntimeException("Error generating JSON payload", e);

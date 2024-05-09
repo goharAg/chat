@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 @AllArgsConstructor
 public class UserController {
-    private UserRequestService userRequestService;
+    private UserService userRequestService;
 
-    @PostMapping("/{id}")
-    public UserResponseDto passRequest(@PathVariable String id) {
-        UserResponseDto userResponseDto = userRequestService.getUserInfo(id);
+    @GetMapping("/{id}")
+    public UserInfoDto passRequest(@PathVariable String id) {
+        UserInfoDto userResponseDto = userRequestService.getUserInfo(id);
         return userResponseDto;
     }
+
+
 }
