@@ -1,6 +1,7 @@
 package ai.chat.controller;
 
 import ai.chat.dto.JwtAuthenticationResponse;
+import ai.chat.dto.RegistrationDto;
 import ai.chat.dto.UserDto;
 import ai.chat.service.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
   @PostMapping("/signup")
-  public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody UserDto request) {
+  public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody RegistrationDto request) {
     return ResponseEntity.ok(authenticationService.signup(request));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody UserDto request) {
+  public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody RegistrationDto request) {
     return ResponseEntity.ok(authenticationService.signin(request));
   }
 }

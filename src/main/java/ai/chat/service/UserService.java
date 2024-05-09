@@ -1,37 +1,85 @@
 package ai.chat.service;
 
-import ai.chat.dto.UserDto;
-import ai.chat.dto.UserNameDto;
 import ai.chat.model.AccountType;
 import ai.chat.model.User;
 import ai.chat.repository.UserRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ai.chat.dto.*;
 
 @Service
 @AllArgsConstructor
 public class UserService {
+    public UserRepository userRepository;
 
-  public UserRepository userRepository;
+    public UserInfoDto getUserInfo(String id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            AccountType accountType = user.get().getAccountType();
+            String username = user.get().getUsername();
+            return new UserInfoDto(id, username, accountType);
 
-  public User createUser(UserDto userDto){
-    User user = User.builder()
-        .username(userDto.getUsername())
-        .password(userDto.getPassword())
-        .accountType(AccountType.FREE)
-        .build();
+        }else{
+            throw new RuntimeException("so user found");
+        }
+    }
 
-    userRepository.save(user);
-    return user;
-  }
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
+    }
 
-  public List<UserNameDto> getAll(){
-    List<User> users = userRepository.findAll();
+    public boolean isPremium(String id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            AccountType accountType = user.get().getAccountType();
+           return accountType == AccountType.PREMIUM;
+        } else {
+            return false;
+        }
 
-    return users.stream()
-        .map(user -> UserNameDto.builder().username(user.getUsername()).build())
-        .toList();
-  }
+    }
+
+    public String createUser(UserDto userDto){
+        User existingUser = userRepository.findByUsername(userDto.getUsername());
+        if(existingUser != null){
+            throw new IllegalArgumentException("User already exists");
+        }
+        User user = User.builder()
+            .username(userDto.getUsername())
+            .password(userDto.getPassword())
+            .accountType(AccountType.FREE)
+            .build();
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    public User createUser(RegistrationDto registrationDto){
+        User existingUser = userRepository.findByUsername(registrationDto.getUsername());
+        if(existingUser != null){
+            throw new IllegalArgumentException("User already exists");
+        }
+        AccountType accountType = registrationDto.isPremium() ?
+            AccountType.PREMIUM : AccountType.FREE;
+        User user = User.builder()
+            .username(registrationDto.getUsername())
+            .password(registrationDto.getPassword())
+            .accountType(accountType)
+            .build();
+        User s = userRepository.save(user);
+        return s;
+    }
+
+    public List<UserNameDto> getAll(){
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+            .map(user -> UserNameDto.builder().username(user.getUsername()).build())
+            .toList();
+    }
+
+    public User getByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
 }
