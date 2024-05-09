@@ -1,6 +1,7 @@
 package ai.chat.controller;
+import ai.chat.dto.MessageResponseDto;
 import ai.chat.service.ChatService;
-import ai.chat.dto.MessageDTO;
+import ai.chat.dto.MessageRequestDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +15,13 @@ public class LLMController {
     }
 
     @PostMapping("/generate/free")
-    public MessageDTO generateFreeResponse(@RequestBody MessageDTO request)
+    public MessageResponseDto generateFreeResponse(@RequestBody MessageRequestDto request)
         throws JsonProcessingException{
         return chatService.callFreeModel(request);
     }
 
     @PostMapping("/generate/premium")
-    public MessageDTO generatePremiumResponse(@RequestBody MessageDTO request)
+    public MessageResponseDto generatePremiumResponse(@RequestBody MessageRequestDto request)
             throws JsonProcessingException {
         return chatService.callPremiumModel(request);
     }

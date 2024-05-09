@@ -11,14 +11,14 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MessageDTO {
-    private String message;
+public class MessageRequestDto {
+    private String prompt;
     private ArrayList<Integer> context;
 
     @JsonCreator
-    public MessageDTO(@JsonProperty("prompt") String message,
-                      @JsonProperty("context") ArrayList<Integer> context) {
-        this.message = message;
+    public MessageRequestDto(@JsonProperty("prompt") String prompt,
+                             @JsonProperty("context") ArrayList<Integer> context) {
+        this.prompt = prompt;
         this.context = context;
     }
 }
