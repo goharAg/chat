@@ -55,7 +55,7 @@ public class UserService {
         return user.getId();
     }
 
-    public String createUser(RegistrationDto registrationDto){
+    public User createUser(RegistrationDto registrationDto){
         User existingUser = userRepository.findByUsername(registrationDto.getUsername());
         if(existingUser != null){
             throw new IllegalArgumentException("User already exists");
@@ -67,8 +67,8 @@ public class UserService {
             .password(registrationDto.getPassword())
             .accountType(accountType)
             .build();
-        userRepository.save(user);
-        return user.getId();
+        User s = userRepository.save(user);
+        return s;
     }
 
     public List<UserNameDto> getAll(){
@@ -77,5 +77,9 @@ public class UserService {
         return users.stream()
             .map(user -> UserNameDto.builder().username(user.getUsername()).build())
             .toList();
+    }
+
+    public User getByUsername(String username){
+        return userRepository.findByUsername(username);
     }
 }

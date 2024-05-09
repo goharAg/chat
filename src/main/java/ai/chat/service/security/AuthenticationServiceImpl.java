@@ -21,24 +21,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final AuthenticationManager authenticationManager;
   @Override
   public JwtAuthenticationResponse signup(RegistrationDto request) {
-    var user = User.builder().username(request.getUsername())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .accountType(AccountType.FREE).build();
+    request.setPassword(passwordEncoder.encode(request.getPassword()));
 
-    String id = userService.createUser(request);
+    User user = userService.createUser(request);
     var jwt = jwtService.generateToken(user);
-    return JwtAuthenticationResponse.builder().token(jwt).id(id).build();
+    return JwtAuthenticationResponse.builder().token(jwt).id(user.getId()).build();
   }
 
   @Override
   public JwtAuthenticationResponse signin(RegistrationDto request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-    var user = userService.getUserById(request.getUsername());
-    if(user.isEmpty()){
+    var user = userService.getByUsername(request.getUsername());
+    if(user == null){
         throw new IllegalArgumentException("Invalid email or password");
     }
-    var jwt = jwtService.generateToken(user.get());
-    return JwtAuthenticationResponse.builder().token(jwt).id(user.get().getId()).build();
+    var jwt = jwtService.generateToken(user);
+    return JwtAuthenticationResponse.builder().token(jwt).id(user.getId()).build();
   }
 }
