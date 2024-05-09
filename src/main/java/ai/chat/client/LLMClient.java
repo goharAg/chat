@@ -1,19 +1,18 @@
 package ai.chat.client;
 
-import ai.chat.dto.ResponseDTO;
+import ai.chat.dto.MessageResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class LLMClient {
@@ -23,7 +22,7 @@ public class LLMClient {
     private final String model;
 
 
-    public ResponseDTO generateResponse(String prompt, ArrayList<Integer> context)
+    public MessageResponseDto generateResponse(String prompt, ArrayList<Integer> context)
             throws JsonProcessingException {
         String url = baseUrl + "/api/generate";
         ObjectMapper mapper = new ObjectMapper();
@@ -41,7 +40,7 @@ public class LLMClient {
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(payloadMap), headers);
         try {
             String jsonResponse = restTemplate.postForObject(url, entity, String.class);
-            return mapper.readValue(jsonResponse, ResponseDTO.class);
+            return mapper.readValue(jsonResponse, MessageResponseDto.class);
         } catch (JsonProcessingException e) {
             logger.error("Error generating JSON payload: {}", e.getMessage(), e);
             throw new RuntimeException("Error generating JSON payload", e);

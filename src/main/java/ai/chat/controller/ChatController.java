@@ -1,6 +1,7 @@
 package ai.chat.controller;
 
 import ai.chat.dto.UserNameDto;
+
 import ai.chat.service.UserService;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,4 +27,5 @@ public class ChatController {
     List<UserNameDto> users = userService.getAll();
     return ResponseEntity.ok(users);
   }
+
 }

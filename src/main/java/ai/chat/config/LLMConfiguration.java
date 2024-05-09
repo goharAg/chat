@@ -1,6 +1,6 @@
 package ai.chat.config;
 
-import ai.chat.client.LLMClient;
+import ai.chat.client.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -33,9 +33,10 @@ public class LLMConfiguration {
     }
 
     @Bean
-    @Qualifier("PaidLLM")
+    @Qualifier("PremiumLLM")
     public LLMClient paidLLM(RestTemplate restTemplate) {
         return new LLMClient(restTemplate, baseUrl, paidModel);
     }
+
 }
 

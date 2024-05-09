@@ -1,34 +1,28 @@
 package ai.chat.controller;
-import ai.chat.client.LLMClient;
-import ai.chat.dto.ResponseDTO;
+import ai.chat.dto.MessageResponseDto;
+import ai.chat.service.ChatService;
+import ai.chat.dto.MessageRequestDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/chat")
 public class LLMController {
 
-    private final LLMClient freeLLMClient;
-    private final LLMClient paidLLMClient;
-
-    @Autowired
-    public LLMController(@Qualifier("FreeLLM") LLMClient freeLLMClient,
-                         @Qualifier("PaidLLM") LLMClient paidLLMClient) {
-        this.freeLLMClient = freeLLMClient;
-        this.paidLLMClient = paidLLMClient;
+    private ChatService chatService;
+    public LLMController(ChatService service) {
+        chatService = service;
     }
 
     @PostMapping("/generate/free")
-    public ResponseDTO generateFreeResponse(@RequestBody ResponseDTO request)
-            throws JsonProcessingException {
-        return freeLLMClient.generateResponse(request.getResponse(), request.getContext());
+    public MessageResponseDto generateFreeResponse(@RequestBody MessageRequestDto request)
+        throws JsonProcessingException{
+        return chatService.callFreeModel(request);
     }
 
-    @PostMapping("/generate/paid")
-    public ResponseDTO generatePaidResponse(@RequestBody ResponseDTO request)
+    @PostMapping("/generate/premium")
+    public MessageResponseDto generatePremiumResponse(@RequestBody MessageRequestDto request)
             throws JsonProcessingException {
-        return paidLLMClient.generateResponse(request.getResponse(), request.getContext());
+        return chatService.callPremiumModel(request);
     }
 }
